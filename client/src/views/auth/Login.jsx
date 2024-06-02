@@ -5,78 +5,104 @@ import { useLoginMutation } from "../../store/authApiSlice";
 import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
-  const usernameRef = useRef();
-  const dispatch = useDispatch();
-  const [sendLogin, result] = useLoginMutation();
-  const [credentials, setCredentials] = useState({
-    username: "",
-    password: "",
-  });
-  const navigate = useNavigate();
-
-  const { username, password } = credentials;
-
-  const [errors, setErrors] = useState({});
-
-  const handleInput = (e) => {
-    const { name, value } = e.target;
-    setCredentials({
-      ...credentials,
-      [name]: value,
+    const usernameRef = useRef();
+    const dispatch = useDispatch();
+    // const [sendLogin, result] = useLoginMutation();
+    const [apiLogin, result] = useLoginMutation();
+    console.log(result);
+    const [credentials, setCredentials] = useState({
+        username: "",
+        password: "",
     });
-  };
+    const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+    const { username, password } = credentials;
 
-    const newErrors = {};
-    if (username === "") {
-      newErrors.username = "Username is required";
-    }
-    if (password === "") {
-      newErrors.password = "Password is required";
-    }
-    setErrors(newErrors);
+    const [errors, setErrors] = useState({});
 
-    if (Object.values(newErrors).length > 0) {
-      return;
-    }
+    const handleInput = (e) => {
+        console.log(credentials);
+        const { name, value } = e.target;
+        setCredentials({
+            ...credentials,
+            [name]: value,
+        });
+    };
 
-    const result = await sendLogin(credentials).unwrap();
-    dispatch(
-      login({
-        user: result.user.email,
-        token: result.accessToken,
-      })
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const newErrors = {};
+        if (username === "") {
+            newErrors.username = "Username is required";
+        }
+        if (password === "") {
+            newErrors.password = "Password is required";
+        }
+        setErrors(newErrors);
+
+        if (Object.values(newErrors).length > 0) {
+            return;
+        }
+
+        // const result = await sendLogin(credentials).unwrap();
+        // dispatch(
+        //   login({
+        //     user: result.user.email,
+        //     token: result.accessToken,
+        //   })
+        // );
+        // navigate("/", { replace: true });
+
+        const response = await apiLogin({
+            body: {
+                "email": credentials.username,
+                "password": credentials.password
+            }
+        });
+
+        console.log(response);
+
+        if (response.error && response.error.status === 401){
+            return;
+        }
+
+        dispatch(
+            login({
+                user: response.data.user.email,
+                token: response.data.accessToken,
+                role: response.data.user.role,
+            })
+        );
+        navigate("/", { replace: true });
+
+    };
+
+    // focus on load
+    useEffect(() => {
+        usernameRef.current.focus();
+    }, []);
+
+    return (
+        <form onSubmit={handleSubmit}>
+            {result.isError && <p>Authentication error!</p>}
+            <label htmlFor="username">Felhasználónév: </label>
+            <input
+                onInput={handleInput}
+                ref={usernameRef}
+                type="text"
+                id="username"
+                name="username"
+                value={username}
+                label="Felhasználónév"
+            />
+            {errors.username && <span>{errors.username}</span>}
+            <br />
+            <label htmlFor="password">Jelszó: </label>
+            <input onInput={handleInput} type="password" id="password" name="password" value={password} label="Jelszó" />
+            {errors.password && <span>{errors.password}</span>}
+            <br />
+            <button type="submit"> Elküld</button>
+        </form>
     );
-    navigate("/", { replace: true });
-  };
-
-  // focus on load
-  useEffect(() => {
-    usernameRef.current.focus();
-  }, []);
-
-  return (
-    <form onSubmit={handleSubmit}>
-      {result.isError && <p>Authentication error!</p>}
-      <label htmlFor="username">Felhasználónév: </label>
-      <input
-        onInput={handleInput}
-        ref={usernameRef}
-        type="text"
-        id="username"
-        name="username"
-        value={username}
-        label="Felhasználónév"
-      />
-      {errors.username && <span>{errors.username}</span>}
-      <br />
-      <label htmlFor="password">Jelszó: </label>
-      <input onInput={handleInput} type="password" id="password" name="password" value={password} label="Jelszó" />
-      {errors.password && <span>{errors.password}</span>}
-      <br />
-      <button type="submit"> Elküld</button>
-    </form>
-  );
 };
