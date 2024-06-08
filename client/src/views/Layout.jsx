@@ -5,12 +5,14 @@ import { logout } from "../store/authSlice";
 
 function Layout() {
     const user = useSelector((state) => state.auth.user);
-    const role = useSelector((state) => state.auth.role);
+    const role = user?.role;
+    const token = useSelector((state) => state.auth.token);
     
     const dispatch = useDispatch();
     const navigate = useNavigate();
     
     console.log(user);
+    console.log(token);
 
     const mainMenu = {
         label: 'Főoldal',
@@ -18,6 +20,7 @@ function Layout() {
     };
     const profile = {
         label: 'Profilom',
+        command: () => navigate("/profile"),
     }
     const logoutNavItem = {
         label: 'Kijelentkezés',
@@ -31,10 +34,11 @@ function Layout() {
         {...mainMenu},
         {
             label: 'Regisztráció',
+            url: "/register",
         },
         {
             label: 'Bejelentkezés',
-            url: "/login"
+            url: "/login",
         },
     ];
 

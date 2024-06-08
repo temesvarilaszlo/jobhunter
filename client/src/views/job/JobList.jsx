@@ -39,5 +39,5 @@ export const JobList = () => {
             </>
         );
     }
-    return <p>lol</p>;
+    return null;
 }

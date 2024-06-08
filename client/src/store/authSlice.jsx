@@ -35,15 +35,13 @@ export const authSlice = createSlice({
         login(state, { payload }) {
             state.user = payload.user;
             state.token = payload.token;
-            state.role = payload.role;
+            // state.role = payload.role;
             saveState(state);
-            console.log(payload);
-            console.log(state.user);
         },
         logout(state) {
             state.user = null;
             state.token = null;
-            state.role = null;
+            // state.role = null;
             saveState(state);
         }
     },
@@ -51,8 +49,14 @@ export const authSlice = createSlice({
         builder.addMatcher(authApiSlice.endpoints.login.matchFulfilled, (state, { payload }) => {
             state.user = payload.user;
             state.token = payload.token;
-            state.role = payload.role;
-        })
+            // state.role = payload.role;
+        });
+        // builder.addMatcher(authApiSlice.endpoints.register.matchFulfilled, (state, { payload }) => {
+        //     state.user = payload.user;
+        //     state.token = payload.token;
+        //     state.role = payload.role;
+        //     saveState(state);
+        // });
     }
 })
 

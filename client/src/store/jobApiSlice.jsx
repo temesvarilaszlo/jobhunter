@@ -15,7 +15,17 @@ export const jobApiSlice = createApi({
         getJobById: build.query({
             query: (id) => `/${id}`,
         }),
+        deleteJobById: build.mutation({
+            query: ({token, id}) => ({
+                url: "/" + id,
+                method: "DELETE",
+                headers: {
+                    Authorization: "Bearer " + token,
+                },
+            }),
+            invalidatesTags: ["Jobs"],
+        })
     }),
 });
 
-export const { useGetJobsQuery, useGetJobByIdQuery } = jobApiSlice;
+export const { useGetJobsQuery, useGetJobByIdQuery, useDeleteJobByIdMutation } = jobApiSlice;

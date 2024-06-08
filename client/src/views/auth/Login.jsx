@@ -36,10 +36,10 @@ export const Login = () => {
 
         const newErrors = {};
         if (username === "") {
-            newErrors.username = "Username is required";
+            newErrors.username = "A felhasználónév kötelező!";
         }
         if (password === "") {
-            newErrors.password = "Password is required";
+            newErrors.password = "A jelszó kötelező!";
         }
         setErrors(newErrors);
 
@@ -71,9 +71,9 @@ export const Login = () => {
 
         dispatch(
             login({
-                user: response.data.user.email,
+                user: response.data.user,
                 token: response.data.accessToken,
-                role: response.data.user.role,
+                // role: response.data.user.role,
             })
         );
         navigate("/", { replace: true });
@@ -87,20 +87,10 @@ export const Login = () => {
 
     return (
         <form onSubmit={handleSubmit} 
-            className="mx-auto my-8 max-w-xl flex flex-col gap-6 justify-center"
+            className="mx-auto my-8 max-w-xl flex flex-col gap-6 items-center"
         >
-            {result.isError && <p>Authentication error!</p>}
-            {/* <label htmlFor="username">Felhasználónév: </label>
-            <input
-                onInput={handleInput}
-                ref={usernameRef}
-                type="text"
-                id="username"
-                name="username"
-                value={username}
-                label="Felhasználónév"
-            /> */}
-            <div className="flex flex-row justify-center">
+            {result.isError && <p className="text-red-600">A jelszó vagy az email nem megfelelő!</p>}
+            <div className="flex flex-col justify-center">
                 <FloatLabel>
                     <InputText value={username}
                         onChange={handleInput}
@@ -111,22 +101,20 @@ export const Login = () => {
                     />
                     <label htmlFor="username">Felhasználónév</label>
                 </FloatLabel>
-                {errors.username && <span>{errors.username}</span>}
+                {errors.username && <span className="text-red-600 ml-2">{errors.username}</span>}
             </div>
             
-            {/* <label htmlFor="password">Jelszó: </label>
-            <input onInput={handleInput} type="password" id="password" name="password" value={password} label="Jelszó" /> */}
-            <div className="flex flex-row justify-center">
+            <div className="flex flex-col justify-center">
                 <FloatLabel>
                     <InputText value={password}
                         onChange={handleInput}
-                        type="text"
+                        type="password"
                         id="password"
                         name="password"
                     />
                     <label htmlFor="username">Jelszó</label>
                 </FloatLabel>
-                {errors.password && <span>{errors.password}</span>}
+                {errors.password && <span className="ml-2 text-red-600">{errors.password}</span>}
             </div>
             
             <button type="submit" className='p-2 bg-sky-500 text-white rounded-lg max-w-28 hover:bg-sky-700'>Bejelentkezés</button>
