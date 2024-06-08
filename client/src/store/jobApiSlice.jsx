@@ -8,7 +8,7 @@ export const jobApiSlice = createApi({
     tagTypes: ["Jobs"],
     endpoints: (build) => ({
         getJobs: build.query({
-            query: () => "",
+            query: (filters) => filters,
             transformResponse: response => response.data,
             providesTags: ["Jobs"],
         }),

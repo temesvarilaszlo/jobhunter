@@ -3,6 +3,8 @@ import { login } from "../../store/authSlice";
 import { useDispatch } from "react-redux";
 import { useLoginMutation } from "../../store/authApiSlice";
 import { useNavigate } from "react-router-dom";
+import { InputText } from "primereact/inputtext";
+import { FloatLabel } from "primereact/floatlabel";
 
 export const Login = () => {
     const usernameRef = useRef();
@@ -84,9 +86,11 @@ export const Login = () => {
     }, []);
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} 
+            className="mx-auto my-8 max-w-xl flex flex-col gap-6 justify-center"
+        >
             {result.isError && <p>Authentication error!</p>}
-            <label htmlFor="username">Felhasználónév: </label>
+            {/* <label htmlFor="username">Felhasználónév: </label>
             <input
                 onInput={handleInput}
                 ref={usernameRef}
@@ -95,14 +99,37 @@ export const Login = () => {
                 name="username"
                 value={username}
                 label="Felhasználónév"
-            />
-            {errors.username && <span>{errors.username}</span>}
-            <br />
-            <label htmlFor="password">Jelszó: </label>
-            <input onInput={handleInput} type="password" id="password" name="password" value={password} label="Jelszó" />
-            {errors.password && <span>{errors.password}</span>}
-            <br />
-            <button type="submit"> Elküld</button>
+            /> */}
+            <div className="flex flex-row justify-center">
+                <FloatLabel>
+                    <InputText value={username}
+                        onChange={handleInput}
+                        ref={usernameRef}
+                        type="text"
+                        id="username"
+                        name="username"
+                    />
+                    <label htmlFor="username">Felhasználónév</label>
+                </FloatLabel>
+                {errors.username && <span>{errors.username}</span>}
+            </div>
+            
+            {/* <label htmlFor="password">Jelszó: </label>
+            <input onInput={handleInput} type="password" id="password" name="password" value={password} label="Jelszó" /> */}
+            <div className="flex flex-row justify-center">
+                <FloatLabel>
+                    <InputText value={password}
+                        onChange={handleInput}
+                        type="text"
+                        id="password"
+                        name="password"
+                    />
+                    <label htmlFor="username">Jelszó</label>
+                </FloatLabel>
+                {errors.password && <span>{errors.password}</span>}
+            </div>
+            
+            <button type="submit" className='p-2 bg-sky-500 text-white rounded-lg max-w-28 hover:bg-sky-700'>Bejelentkezés</button>
         </form>
     );
 };
