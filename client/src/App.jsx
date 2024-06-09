@@ -11,9 +11,6 @@ import { ApplicantList } from "./views/profile/ApplicantList";
 
 
 function App() {
-    // console.log(data);
-    // console.log(user);
-
     return (
         <BrowserRouter>
             <Routes>
@@ -22,11 +19,6 @@ function App() {
                         path="/"
                         element={
                             <JobList />
-                            // <RequireAuth>
-                            //   <>
-                            //     <p>Be vagy jelentkezve.</p>
-                            //   </>
-                            // </RequireAuth>
                         }
                     />
                     <Route path="/jobs/:jobId" element={<JobDetail />} />

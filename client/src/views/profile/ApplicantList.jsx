@@ -6,13 +6,10 @@ export const ApplicantList = () => {
     const { jobId } = useParams();
     const token = useSelector((state) => state.auth.token);
     const { data: applicants, error, isLoading, isSuccess } = useGetApplicantsForJobQuery({jobId, token});
-    // const resp = useGetApplicantsForJobQuery({jobId, token});
-    // console.log(resp);
 
     if (isLoading) return <p>Loading...</p>;
     if (error) return <p>An error occurred: {error.message}</p>;
     if (isSuccess) {
-        // console.log(resp);
         if (applicants.length === 0){
             return <p className="mt-4 text-2xl font-bold text-center mx-auto">Erre az állásra nincsenek jelentkezők.</p>
         }

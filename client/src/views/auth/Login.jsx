@@ -9,7 +9,6 @@ import { FloatLabel } from "primereact/floatlabel";
 export const Login = () => {
     const usernameRef = useRef();
     const dispatch = useDispatch();
-    // const [sendLogin, result] = useLoginMutation();
     const [apiLogin, result] = useLoginMutation();
 
     const [credentials, setCredentials] = useState({
@@ -62,7 +61,6 @@ export const Login = () => {
             login({
                 user: response.data.user,
                 token: response.data.accessToken,
-                // role: response.data.user.role,
             })
         );
         navigate("/", { replace: true });

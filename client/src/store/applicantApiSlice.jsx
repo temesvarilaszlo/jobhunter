@@ -26,7 +26,6 @@ export const applicantApiSlice = createApi({
                     Authorization: "Bearer " + token,
                 },
             }),
-            // transformResponse: response => response.data,
         }),
     }),
 });

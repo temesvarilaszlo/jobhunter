@@ -90,7 +90,6 @@ export const Register = () => {
             login({
                 user: loginResponse.data.user,
                 token: loginResponse.data.accessToken,
-                // role: loginResponse.data.user.role,
             })
         );
 
