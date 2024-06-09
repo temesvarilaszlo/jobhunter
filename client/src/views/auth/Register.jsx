@@ -6,12 +6,13 @@ import { useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { FloatLabel } from "primereact/floatlabel";
 import { SelectButton } from 'primereact/selectbutton';
+import { useAddExperiencesMutation } from "../../store/experienceApiSlice";
 
 
 export const Register = () => {
     const [apiRegister, result] = useRegisterMutation();
     const [apiLogin] = useLoginMutation();
-    console.log(result);
+    const [apiAddExperiences] = useAddExperiencesMutation();
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [credentials, setCredentials] = useState({
@@ -19,6 +20,7 @@ export const Register = () => {
         username: "",
         password: "",
         role: "jobseeker",
+        experience: "",
     });
     const [errors, setErrors] = useState({});
     const usernameRef = useRef();
@@ -86,11 +88,35 @@ export const Register = () => {
 
         dispatch(
             login({
-                user: loginResponse.data.user.email,
+                user: loginResponse.data.user,
                 token: loginResponse.data.accessToken,
                 // role: loginResponse.data.user.role,
             })
         );
+
+        // add experiences
+        if (credentials.role === "jobseeker"){
+            const experienceLines = credentials.experience.split("\n");
+            const experiences = experienceLines.map(line => line.split(";"));
+            const experiencesToAdd = [];
+            
+            for (const exp of experiences) {
+                if (exp.length === 3){
+                    experiencesToAdd.push({
+                        company: exp[0],
+                        title: exp[1],
+                        interval: exp[2],
+                    });
+                }
+            }
+            console.log(experiencesToAdd);
+            const addExpResponse = await apiAddExperiences({
+                token: loginResponse.data.accessToken,
+                body: [...experiencesToAdd],
+            });
+            console.log(addExpResponse);
+        }
+
 
         navigate("/", { replace: true });
     }
@@ -155,6 +181,16 @@ export const Register = () => {
                 />
                 {errors.role && <span className="ml-2 text-red-600">{errors.role}</span>}
             </div>
+
+            {credentials.role === "jobseeker" && 
+                <div className="flex flex-col justify-center">
+                    <h3 className="font-bold text-lg">Tapasztalat hozzáadása</h3>
+                    <textarea name="experiences" id="experiences"
+                        className="w-96 min-h-28 max-h-60 text-sm"
+                        onChange={e => setCredentials({...credentials, experience: e.target.value})}
+                    ></textarea>
+                </div>
+            }
             <button type="submit" className='p-2 bg-sky-500 text-white rounded-lg max-w-28 hover:bg-sky-700'>Regisztráció</button>
         </form>
     );

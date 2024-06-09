@@ -10,9 +10,6 @@ function Layout() {
     
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    
-    console.log(user);
-    console.log(token);
 
     const mainMenu = {
         label: 'Főoldal',
@@ -53,6 +50,7 @@ function Layout() {
         {...profile},
         {
             label: 'Új álláshirdetés',
+            command: () => navigate('/newjob'),
         },
         {...logoutNavItem},
     ];

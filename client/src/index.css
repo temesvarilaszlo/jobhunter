@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 
-.p-inputtext {
+.p-inputtext, textarea {
   border: 1px solid lightgray
 }
 

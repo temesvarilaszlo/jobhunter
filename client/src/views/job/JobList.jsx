@@ -14,18 +14,14 @@ export const JobList = () => {
         homeOffice: 0,
     };
     const [filters, setFilters] = useState({...initialFilters});
-    console.log(filters);
 
     let queryFilter = `?salaryFrom[$gte]=${filters.salaryFrom}&salaryTo[$lte]=${filters.salaryTo}`;
     queryFilter += filters.company !== "" ? `&company[$like]=%${filters.company}%` : "";
     queryFilter += filters.type !== "" ? `&type=${filters.type}` : "";
     queryFilter += filters.city !== "" ? `&city=${filters.city}` : "";
     queryFilter += filters.homeOffice !== 0 ? (filters.homeOffice === 1 ? `&homeOffice=true` : `&homeOffice=false`) : "";
-    console.log(queryFilter);
 
     const { data: jobs, error, isLoading, isSuccess } = useGetJobsQuery(queryFilter);
-    console.log(jobs);
-    console.log(filters.type);
 
     if (isLoading) return <p>Loading...</p>;
     if (error) return <p>An error occurred: {error.message}</p>;

@@ -11,7 +11,7 @@ export const Login = () => {
     const dispatch = useDispatch();
     // const [sendLogin, result] = useLoginMutation();
     const [apiLogin, result] = useLoginMutation();
-    console.log(result);
+
     const [credentials, setCredentials] = useState({
         username: "",
         password: "",
@@ -23,7 +23,6 @@ export const Login = () => {
     const [errors, setErrors] = useState({});
 
     const handleInput = (e) => {
-        console.log(credentials);
         const { name, value } = e.target;
         setCredentials({
             ...credentials,
@@ -47,14 +46,6 @@ export const Login = () => {
             return;
         }
 
-        // const result = await sendLogin(credentials).unwrap();
-        // dispatch(
-        //   login({
-        //     user: result.user.email,
-        //     token: result.accessToken,
-        //   })
-        // );
-        // navigate("/", { replace: true });
 
         const response = await apiLogin({
             body: {
@@ -62,8 +53,6 @@ export const Login = () => {
                 "password": credentials.password
             }
         });
-
-        console.log(response);
 
         if (response.error && response.error.status === 401){
             return;

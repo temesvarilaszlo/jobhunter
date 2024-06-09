@@ -1,11 +1,13 @@
 import { useSelector } from "react-redux";
 import { useDeleteJobByIdMutation, useGetJobsQuery } from "../../store/jobApiSlice";
+import { useNavigate } from "react-router-dom";
 
 export const CompanyProfile = () => {
     const companyId = useSelector((state) => state.auth.user.id);
     const token = useSelector((state) => state.auth.token);
     const { data: jobs, error, isLoading, isSuccess } = useGetJobsQuery(`?userId=${companyId}`);
     const [apiDelete, result] = useDeleteJobByIdMutation();
+    const navigate = useNavigate();
 
     const handleDelete = async (id) => {
         const response = await apiDelete({token, id});
@@ -34,10 +36,14 @@ export const CompanyProfile = () => {
                             </div>
                         </div>
                         <div className="flex flex-row gap-1 items-center">
-                            <button className="p-2 bg-slate-100 rounded-lg hover:bg-slate-300 max-h-10">
+                            <button className="p-2 bg-slate-100 rounded-lg hover:bg-slate-300 max-h-10"
+                                onClick={() => navigate(`jobs/${job.id}`)}
+                            >
                                 Szerkesztés <i className="pi pi-pencil"></i>
                             </button>
-                            <button className="p-2 bg-slate-100 rounded-lg hover:bg-slate-300 max-h-10">
+                            <button className="p-2 bg-slate-100 rounded-lg hover:bg-slate-300 max-h-10"
+                                onClick={() => navigate(`jobs/${job.id}/applicants`)}
+                            >
                                 Megtekintés <i className="pi pi-eye"></i>
                             </button>
                             <button className="p-2 text-white bg-red-500 rounded-lg hover:bg-red-700 max-h-10"
@@ -48,7 +54,9 @@ export const CompanyProfile = () => {
                         </div>
                     </div>
                 ))}
-                <button className=' p-2 bg-sky-500 text-white rounded-lg hover:bg-sky-700'>
+                <button className=' p-2 bg-sky-500 text-white rounded-lg hover:bg-sky-700'
+                    onClick={() => navigate('/newjob')}
+                >
                     Hirdetés hozzáadása <i className="pi pi-plus"></i>
                 </button> 
             </>

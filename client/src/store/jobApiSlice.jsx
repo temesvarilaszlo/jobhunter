@@ -14,6 +14,29 @@ export const jobApiSlice = createApi({
         }),
         getJobById: build.query({
             query: (id) => `/${id}`,
+            providesTags: ["Jobs"],
+        }),
+        createJob: build.mutation({
+            query: ({token, body}) => ({
+                url: "",
+                method: "POST",
+                headers: {
+                    Authorization: "Bearer " + token,
+                },
+                body: {...body},
+            }),
+            invalidatesTags: ["Jobs"],
+        }),
+        modifyJobById: build.mutation({
+            query: ({token, body, id}) => ({
+                url: "/" + id,
+                method: "PATCH",
+                headers: {
+                    Authorization: "Bearer " + token,
+                },
+                body: {...body},
+            }),
+            invalidatesTags: ["Jobs"],
         }),
         deleteJobById: build.mutation({
             query: ({token, id}) => ({
@@ -28,4 +51,4 @@ export const jobApiSlice = createApi({
     }),
 });
 
-export const { useGetJobsQuery, useGetJobByIdQuery, useDeleteJobByIdMutation } = jobApiSlice;
+export const { useGetJobsQuery, useGetJobByIdQuery, useCreateJobMutation, useModifyJobByIdMutation, useDeleteJobByIdMutation } = jobApiSlice;
